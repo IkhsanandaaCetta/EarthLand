@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Sistem Pendaftaran Tanah</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+
+        .video-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            object-fit: cover;
+        }
+
+        .video-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 27, 7, 0.6);
+            z-index: -1;
+        }
+
+        .login-container {
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 25px 50px rgba(15, 27, 7, 0.3);
+            overflow: hidden;
+            width: 100%;
+            max-width: 450px;
+            position: relative;
+            z-index: 1;
+            margin: 20px auto;
+            flex-shrink: 0;
+        }
+
+        .login-header {
+            background: linear-gradient(135deg, #0F1B07 0%, #5C821A 100%);
+            color: #ffffff;
+            padding: 40px 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .login-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(198,209,102,0.2)"/><circle cx="80" cy="40" r="1.5" fill="rgba(198,209,102,0.2)"/><circle cx="40" cy="80" r="1" fill="rgba(198,209,102,0.2)"/><circle cx="70" cy="70" r="1.5" fill="rgba(198,209,102,0.2)"/></svg>');
+        }
+
+        .login-header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .login-header p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .login-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            opacity: 0.9;
+            color: #C6D166;
+        }
+
+        .login-form {
+            padding: 40px 30px;
+            background: #ffffff;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #0F1B07;
+            font-size: 1rem;
+        }
+
+        .input-container {
+            position: relative;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 15px 20px;
+            padding-left: 50px;
+            border: 2px solid #C6D166;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #ffffff;
+            color: #0F1B07;
+        }
+
+        input:focus {
+            border-color: #5C821A;
+            background: #ffffff;
+            outline: none;
+            box-shadow: 0 0 15px rgba(92, 130, 26, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #5C821A;
+            font-size: 1.2rem;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #5C821A;
+            font-size: 1.1rem;
+            user-select: none;
+        }
+
+        .password-toggle:hover {
+            color: #0F1B07;
+        }
+
+        .remember-forgot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 25px 0;
+            flex-wrap: wrap;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .remember-me label {
+            color: #0F1B07;
+            margin-bottom: 0;
+        }
+
+        .remember-me input[type="checkbox"] {
+            width: auto;
+            margin: 0;
+            accent-color: #5C821A;
+        }
+
+        .forgot-password {
+            color: #5C821A;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .forgot-password:hover {
+            color: #0F1B07;
+            text-decoration: underline;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #5C821A 0%, #0F1B07 100%);
+            color: #ffffff;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(92, 130, 26, 0.4);
+            background: linear-gradient(135deg, #C6D166 0%, #5C821A 100%);
+            color: #0F1B07;
+        }
+
+        .login-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 30px 0;
+            color: #5C821A;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: #C6D166;
+        }
+
+        .divider span {
+            padding: 0 15px;
+            font-size: 0.9rem;
+        }
+
+        .register-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .register-link p {
+            color: #0F1B07;
+        }
+
+        .register-link a {
+            color: #5C821A;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .register-link a:hover {
+            color: #0F1B07;
+            text-decoration: underline;
+        }
+
+        .alert {
+            padding: 12px 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            display: none;
+            font-size: 0.95rem;
+        }
+
+        .alert-success {
+            background: rgba(198, 209, 102, 0.2);
+            color: #0F1B07;
+            border: 1px solid #C6D166;
+        }
+
+        .alert-error {
+            background: rgba(220, 53, 69, 0.1);
+            color: #0F1B07;
+            border: 1px solid #dc3545;
+        }
+
+        @media (max-width: 480px) {
+            body {
+                align-items: flex-start;
+                padding: 10px;
+                min-height: 100vh;
+            }
+
+            .login-container {
+                margin: 20px 10px;
+                position: relative;
+            }
+            
+            .login-header {
+                padding: 30px 20px;
+            }
+            
+            .login-form {
+                padding: 30px 20px;
+            }
+            
+            .remember-forgot {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+        }
+
+        .loading {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #ffffff;
+            border-top: 2px solid transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Video Background -->
+    <video class="video-background" autoplay muted loop>
+        <source src="Video/Login.mp4" type="video/mp4">
+        <source src="Video/Login.mp4" type="video/mp4">
+        <!-- Fallback gradient if video fails to load -->
+    </video>
+    <div class="video-overlay"></div>
+
+    <div class="login-container">
+        <div class="login-header">
+            <div class="login-icon">🔐</div>
+            <h1>Masuk</h1>
+            <p>Sistem Pendaftaran Tanah</p>
+        </div>
+
+        <div class="login-form">
+            <div class="alert alert-success" id="successAlert">
+                Login berhasil! Mengarahkan ke Pendaftaran Tanah...
+            </div>
+            
+            <div class="alert alert-error" id="errorAlert">
+                Username atau password salah!
+            </div>
+
+            <form id="loginForm" method="POST" action="login.php">
+                <div class="form-group">
+                    <label for="username">Username atau Email</label>
+                    <div class="input-container">
+                        <span class="input-icon">👤</span>
+                        <input type="text" id="username" name="username" placeholder="Masukkan username atau email" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="input-container">
+                        <span class="input-icon">🔒</span>
+                        <input type="password" id="password" name="password" placeholder="Masukkan password" required>
+                        <span class="password-toggle" onclick="togglePassword()">👁</span>
+                    </div>
+                </div>
+
+                <div class="remember-forgot">
+                    <div class="remember-me">
+                        <input type="checkbox" id="remember" name="remember">
+                        <label for="remember">Ingat saya</label>
+                    </div>
+                    <a href="#" class="forgot-password" onclick="forgotPassword()">Lupa password?</a>
+                </div>
+
+                <button type="submit" class="login-btn" id="loginBtn">
+                    <span class="loading" id="loading"></span>
+                    <span id="btnText">Masuk</span>
+                </button>
+            </form>
+
+            <div class="divider">
+                <span>atau</span>
+            </div>
+
+            <div class="register-link">
+                <p>Belum punya akun? <a href="Daftar.html" onclick="showRegister()">Daftar di sini</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Demo users data
+        const users = [
+            {
+                username: 'admin',
+                email: 'admin@tanah.com',
+                password: 'admin123',
+                role: 'administrator'
+            },
+            {
+                username: 'Gilang Setiawan',
+                email: 'gilangsetiawan@gmail.com',
+                password: 'Gilang123',
+                role: 'user'
+            },
+            {
+                username: 'petugas',
+                email: 'petugas@tanah.com',
+                password: 'petugas123',
+                role: 'petugas'
+            }
+        ];
+
+        const form = document.getElementById('loginForm');
+        const successAlert = document.getElementById('successAlert');
+        const errorAlert = document.getElementById('errorAlert');
+        const loginBtn = document.getElementById('loginBtn');
+        const loading = document.getElementById('loading');
+        const btnText = document.getElementById('btnText');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Hide alerts
+            successAlert.style.display = 'none';
+            errorAlert.style.display = 'none';
+
+            // Show loading
+            loading.style.display = 'inline-block';
+            btnText.textContent = 'Memproses...';
+            loginBtn.disabled = true;
+
+            // Get form data
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            const remember = document.getElementById('remember').checked;
+
+            // Simulate API call delay
+            setTimeout(() => {
+                // Check credentials
+                const user = users.find(u => 
+                    (u.username === username || u.email === username) && u.password === password
+                );
+
+                if (user) {
+                    // Success - Store user session
+                    if (remember) {
+                        localStorage.setItem('rememberedUser', username);
+                    }
+                    
+                    // Store user session data
+                    sessionStorage.setItem('currentUser', JSON.stringify({
+                        username: user.username,
+                        email: user.email,
+                        role: user.role,
+                        loginTime: new Date().toISOString()
+                    }));
+                    
+                    successAlert.style.display = 'block';
+                    
+                    // Redirect to Pendaftaran Tanah.html (Updated destination)
+                    setTimeout(() => {
+                        window.location.href = 'Pendaftaran Tanah.html';
+                    }, 1500);
+                } else {
+                    // Error
+                    errorAlert.style.display = 'block';
+                }
+
+                // Hide loading
+                loading.style.display = 'none';
+                btnText.textContent = 'Masuk';
+                loginBtn.disabled = false;
+            }, 1500);
+        });
+
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const toggle = document.querySelector('.password-toggle');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggle.textContent = '🙈';
+            } else {
+                passwordInput.type = 'password';
+                toggle.textContent = '👁';
+            }
+        }
+
+        function forgotPassword() {
+            alert('Fitur lupa password akan segera tersedia!\n\nUntuk demo, gunakan:\n- Username: admin, Password: admin123\n- Username: Gilang Setiawan, Password: Gilang123\n- Username: petugas, Password: petugas123');
+        }
+
+        // Check if user is already logged in
+        window.addEventListener('load', function() {
+            // Check for existing session
+            const currentUser = sessionStorage.getItem('currentUser');
+            if (currentUser) {
+                // User already logged in, redirect to Pendaftaran Tanah (Updated destination)
+                window.location.href = 'Pendaftaran Tanah.html';
+                return;
+            }
+
+            // Check for remembered user
+            const rememberedUser = localStorage.getItem('rememberedUser');
+            if (rememberedUser) {
+                document.getElementById('username').value = rememberedUser;
+                document.getElementById('remember').checked = true;
+            }
+        });
+
+        // Handle video load error - fallback to gradient
+        const video = document.querySelector('.video-background');
+        video.addEventListener('error', function() {
+            document.body.style.background = 'linear-gradient(135deg, #0F1B07 0%, #5C821A 50%, #C6D166 100%)';
+            video.style.display = 'none';
+        });
+
+        // Demo info
+        console.log('=== DEMO LOGIN CREDENTIALS ===');
+        console.log('Username: admin | Password: admin123');
+        console.log('Username: Gilang Setiawan | Password: Gilang123');
+        console.log('Username: petugas | Password: petugas123');
+        console.log('Target: Pendaftaran Tanah.html');
+        console.log('===============================');
+    </script>
+</body>
+</html>

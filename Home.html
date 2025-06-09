@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EarthLand - Layanan Pertanahan Terpercaya</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        /* Updated Header with New Color Palette */
+        header {
+            background: linear-gradient(135deg, #0F1B07 0%, #5C821A 50%, #0F1B07 100%);
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: #ffffff;
+        }
+
+        .logo img {
+            height: 40px;
+            width: auto;
+            margin-right: 0.5rem;
+        }
+
+        .logo-text {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #ffffff;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            background: linear-gradient(135deg, #5C821A 0%, #C6D166 100%);
+            color: #0F1B07;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .mobile-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .mobile-toggle span {
+            width: 25px;
+            height: 3px;
+            background: #ffffff;
+            margin: 3px 0;
+            transition: 0.3s;
+        }
+
+        /* Updated Hero Section */
+        .hero {
+            position: relative;
+            padding: 120px 0 80px;
+            text-align: center;
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .hero-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -2;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(15, 27, 7, 0.8) 0%, rgba(92, 130, 26, 0.6) 50%, rgba(15, 27, 7, 0.8) 100%);
+            z-index: -1;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.95;
+            line-height: 1.6;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary, .btn-secondary {
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #5C821A 0%, #C6D166 100%);
+            color: #0F1B07;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #ffffff;
+            border: 2px solid #ffffff;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #C6D166 0%, #5C821A 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.3);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.9);
+            color: #0F1B07;
+            transform: translateY(-2px);
+        }
+
+        /* Updated Features Section */
+        .features {
+            padding: 80px 0;
+            background: linear-gradient(135deg, #ffffff 0%, rgba(198, 209, 102, 0.1) 50%, #ffffff 100%);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: #0F1B07;
+            font-weight: 700;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, #ffffff 0%, rgba(198, 209, 102, 0.05) 100%);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(15, 27, 7, 0.15);
+            text-align: center;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+            border: 1px solid rgba(92, 130, 26, 0.2);
+            border-left: 5px solid #5C821A;
+            position: relative;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            text-decoration: none;
+            color: inherit;
+            box-shadow: 0 12px 35px rgba(15, 27, 7, 0.25);
+            border-left-color: #C6D166;
+            background: linear-gradient(135deg, #ffffff 0%, rgba(198, 209, 102, 0.1) 100%);
+        }
+
+        /* Locked Feature Card Styles */
+        .feature-card.locked {
+            background: linear-gradient(135deg, #f5f5f5 0%, rgba(128, 128, 128, 0.1) 100%);
+            border-left-color: #888;
+            cursor: pointer;
+            opacity: 0.7;
+            position: relative;
+        }
+
+        .feature-card.locked:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(15, 27, 7, 0.2);
+            border-left-color: #5C821A;
+            background: linear-gradient(135deg, #f8f8f8 0%, rgba(128, 128, 128, 0.15) 100%);
+        }
+
+        .feature-card.locked::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+            z-index: 1;
+        }
+
+        .feature-card.locked .lock-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.95);
+            padding: 1rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            z-index: 2;
+            text-align: center;
+            border: 2px solid #ddd;
+        }
+
+        .feature-card.locked .lock-icon {
+            font-size: 2rem;
+            color: #888;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-card.locked .lock-text {
+            color: #666;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-card.locked .login-required {
+            color: #5C821A;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .feature-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: #0F1B07;
+            font-weight: 600;
+        }
+
+        .feature-card p {
+            color: #5C821A;
+            line-height: 1.6;
+        }
+
+        .feature-card.locked h3,
+        .feature-card.locked p {
+            color: #888;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.3s;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            margin: 15% auto;
+            padding: 2rem;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            cursor: pointer;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+        }
+
+        .modal h2 {
+            color: #0F1B07;
+            margin-bottom: 1rem;
+        }
+
+        .modal p {
+            color: #5C821A;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .modal-btn {
+            background: linear-gradient(135deg, #5C821A 0%, #C6D166 100%);
+            color: #0F1B07;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            margin: 0.5rem;
+        }
+
+        .modal-btn:hover {
+            background: linear-gradient(135deg, #C6D166 0%, #5C821A 100%);
+            transform: translateY(-2px);
+            text-decoration: none;
+            color: #0F1B07;
+        }
+
+        .modal-btn.secondary {
+            background: transparent;
+            color: #5C821A;
+            border: 2px solid #5C821A;
+        }
+
+        .modal-btn.secondary:hover {
+            background: #5C821A;
+            color: #ffffff;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Updated About Section */
+        .about {
+            padding: 80px 0;
+            background: linear-gradient(135deg, rgba(198, 209, 102, 0.1) 0%, #ffffff 50%, rgba(198, 209, 102, 0.1) 100%);
+        }
+
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .about-text h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: #0F1B07;
+            font-weight: 700;
+        }
+
+        .about-text p {
+            font-size: 1rem;
+            color: #5C821A;
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+        }
+
+        .about-image {
+            text-align: center;
+        }
+
+        .about-image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 15px;
+            box-shadow: 0 12px 30px rgba(15, 27, 7, 0.2);
+        }
+
+        /* Updated Contact Section */
+        .contact {
+            padding: 80px 0;
+            background: linear-gradient(135deg, #0F1B07 0%, #5C821A 50%, #0F1B07 100%);
+            color: #ffffff;
+            position: relative;
+        }
+
+        .contact::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.05)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.05)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .contact h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: #ffffff;
+            position: relative;
+            z-index: 1;
+        }
+
+        .contact-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: start;
+            position: relative;
+            z-index: 1;
+        }
+
+        .contact-info {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%);
+            padding: 2rem;
+            border-radius: 15px;
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .contact-info h3 {
+            color: #ffffff;
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+            border-bottom: 2px solid #C6D166;
+            padding-bottom: 0.5rem;
+        }
+
+        .contact-item {
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            border-left: 3px solid #C6D166;
+        }
+
+        .contact-item strong {
+            display: block;
+            color: #C6D166;
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .contact-item p {
+            margin: 0;
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.4;
+        }
+
+        .contact-item a {
+            color: #C6D166;
+            text-decoration: none;
+        }
+
+        .contact-item a:hover {
+            color: #ffffff;
+            text-decoration: underline;
+        }
+
+        .social-links {
+            list-style: none;
+            padding: 0;
+        }
+
+        .social-links li {
+            margin: 0.8rem 0;
+            padding: 0.8rem;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            color: rgba(255, 255, 255, 0.9);
+            border-left: 3px solid #5C821A;
+        }
+
+        .map-container {
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.4);
+            position: relative;
+            z-index: 1;
+        }
+
+        .map-container iframe {
+            width: 100%;
+            height: 400px;
+            border: none;
+        }
+
+        .rating-section {
+            text-align: center;
+            margin-top: 3rem;
+            padding: 2rem;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%);
+            border-radius: 15px;
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+
+        .rating-section h3 {
+            color: #ffffff;
+            margin-bottom: 1rem;
+        }
+
+        .rating-btn {
+            background: linear-gradient(135deg, #5C821A 0%, #C6D166 100%);
+            color: #0F1B07;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .rating-btn:hover {
+            background: linear-gradient(135deg, #C6D166 0%, #5C821A 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.3);
+        }
+
+        .rating {
+            font-size: 1.1rem;
+            color: #C6D166;
+        }
+
+        /* Updated Footer */
+        footer {
+            background: linear-gradient(135deg, #0F1B07 0%, rgba(15, 27, 7, 0.9) 100%);
+            padding: 2rem 0;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .mobile-toggle {
+                display: flex;
+            }
+
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: linear-gradient(135deg, #0F1B07 0%, #5C821A 50%, #0F1B07 100%);
+                flex-direction: column;
+                padding: 1rem 0;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .nav-links li {
+                margin: 0.5rem 0;
+            }
+
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn-primary, .btn-secondary {
+                width: 200px;
+            }
+
+            .about-content,
+            .contact-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .about-text h2,
+            .contact h2 {
+                font-size: 2rem;
+            }
+
+            .map-container iframe {
+                height: 300px;
+            }
+
+            .modal-content {
+                margin: 25% auto;
+                width: 95%;
+            }
+
+            .logo img {
+                height: 35px;
+            }
+
+            .logo-text {
+                font-size: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 1rem;
+            }
+
+            .hero-content {
+                padding: 0 1rem;
+            }
+
+            .contact-info {
+                padding: 1.5rem;
+            }
+
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+
+            .logo img {
+                height: 30px;
+            }
+
+            .logo-text {
+                font-size: 1.3rem;
+            }
+        }
+
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="#home" class="logo">
+                <img src="img/Logo.png" alt="EarthLand Logo" style="width: 80px; height: auto;">
+                <span class="logo-text">EarthLand</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#layanan">Layanan</a></li>
+                <li><a href="#tentang">Tentang</a></li>
+                <li><a href="#kontak">Kontak</a></li>
+            </ul>
+            <div class="mobile-toggle" onclick="toggleMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section id="home" class="hero">
+            <video class="hero-video" autoplay muted loop>
+                <source src="video/Home.mp4" type="video/mp4">
+                <source src="video/Home.webm" type="video/webm">
+                <!-- Fallback untuk browser yang tidak mendukung video -->
+                Your browser does not support the video tag.
+            </video>
+            <div class="hero-overlay"></div>
+            <div class="hero-content">
+                <h1>Selamat Datang di EarthLand</h1>
+                <p>Cek status kepemilikan tanahmu sekarang! Pastikan setiap bidang tanah yang kamu miliki sudah terdaftar secara resmi di sistem kami untuk menjamin perlindungan hukum dan menghindari sengketa di kemudian hari.<br>Tanahmu, Hakmu! Cek dan Daftarkan Sekarang!</p>
+                <div class="cta-buttons">
+                    <a href="#layanan" class="btn-primary">Jelajahi Layanan</a>
+                    <a href="#tentang" class="btn-secondary">Pelajari Lebih Lanjut</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="layanan" class="features">
+            <div class="container">
+                <h2 class="section-title">Layanan Kami</h2>
+                <div class="features-grid">
+                    <a href="Peraturan.html" class="feature-card">
+                        <span class="feature-icon">⚖</span>
+                        <h3>Peraturan</h3>
+                        <p>Akses lengkap ke peraturan dan kebijakan terkait kepemilikan tanah serta hak dan kewajiban pemilik tanah.</p>
+                    </a>
+                    <a href="Pemetaan.html" class="feature-card">
+                        <span class="feature-icon">🗺</span>
+                        <h3>Pemetaan & Survey</h3>
+                        <p>Pemetaan status dan detail bidang tanah yang telah terdaftar secara resmi.</p>
+                    </a>
+                    <div class="feature-card locked" onclick="showLoginModal()">
+                        <span class="feature-icon">📋</span>
+                        <h3>Pendaftaran Tanah</h3>
+                        <p>Pendaftaran tanah untuk menjamin legalitas dan kepastian hukum kepemilikan.</p>
+                        <div class="lock-overlay">
+                            <div class="lock-icon">🔒</div>
+                            <div class="lock-text">Layanan Terkunci</div>
+                            <div class="login-required">Login diperlukan</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="tentang" class="about">
+            <div class="container">
+                <div class="about-content">
+                    <div class="about-text">
+                        <h2>Tentang EarthLand</h2>
+                        <p><strong>Visi:</strong> Menjadi platform digital terpercaya dalam penyediaan informasi kepemilikan dan lokasi bidang tanah secara akurat, transparan, dan mudah diakses oleh masyarakat.</p>
+                        <p><strong>Misi:</strong></p>
+                        <p>1. Menyediakan informasi terkini mengenai data pemilik, status kepemilikan, dan lokasi bidang tanah secara akurat dan terverifikasi.</p>
+                        <p>2. Mendorong partisipasi masyarakat untuk mendaftarkan bidang tanah mereka demi legalitas dan ketertiban administrasi pertanahan.</p>
+                        <p>3. Meningkatkan transparansi dan efisiensi dalam pengelolaan data pertanahan bagi masyarakat dan pemerintah desa.</p>
+                        <a href="#kontak" class="btn-primary">Hubungi Kami</a>
+                    </div>
+                    <div class="about-image">
+                        <img src="img/CoverEL.jpg" alt="EarthLand Cover" />
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="contact" id="kontak">
+            <div class="container">
+                <h2>Kontak Kami</h2>
+                <div class="contact-content">
+                    <div class="contact-info">
+                        <h3>Informasi Kontak</h3>
+                        
+                        <div class="contact-item">
+                            <strong>📍 Alamat</strong>
+                            <p>Dusun I, Desa Canden, Kec. Sambi,<br>Kabupaten Boyolali, Jawa Tengah 57376</p>
+                        </div>
+
+                        <div class="contact-item">
+                            <strong>📱 WhatsApp</strong>
+                            <p>0811-9076-0008 (Chat Only)</p>
+                        </div>
+
+                        <div class="contact-item">
+                            <strong>✉ Email</strong>
+                            <p><a href="mailto:surat@EarthLand.go.id">surat@EarthLand.go.id</a></p>
+                        </div>
+                        <h3>Social Media</h3>
+                        <ul class="social-links">
+                            <li>📷 Instagram: EarthLand.id</li>
+                            <li>📘 Facebook: EarthLand.Canden</li>
+                            <li>🐦 Twitter: Earth.LandCanden</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="map-container">
+                        <iframe 
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1983.1528859384203!2d106.7988694!3d-6.2657269!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69f1dfd31cd681%3A0x4b3f1c0de2c4b9cc!2sKementerian%20Agraria%20dan%20Tata%20Ruang%2FBadan%20Pertanahan%20Nasional!5e0!3m2!1sid!2sid!4v1683506003282!5m2!1sid!2sid" 
+                            allowfullscreen="" 
+                            loading="lazy">
+                        </iframe>
+                    </div>
+                </div>
+                
+                <div class="rating-section">
+                    <h3>Bantu Kami Menjadi Lebih Baik</h3>
+                    <button class="rating-btn">Beri Rating</button>
+                    <div class="rating">
+                        ⭐⭐⭐⭐⭐ 4.7 (153 Rating)
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Login Required Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeLoginModal()">&times;</span>
+            <h2>🔒 Login Diperlukan</h2>
+            <p>Untuk mengakses layanan <strong>Pendaftaran Tanah</strong>, Anda perlu login terlebih dahulu ke akun EarthLand Anda.</p>
+            <p>Layanan ini memerlukan verifikasi identitas untuk menjamin keamanan dan keabsahan data pertanahan.</p>
+            <a href="login.html" class="modal-btn">Login Sekarang</a>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 EarthLand. Semua hak dilindungi undang-undang.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Login status - dalam implementasi nyata, ini akan diambil dari server/localStorage
+        let isLoggedIn = false;
+
+        // Mobile menu toggle
+        function toggleMenu() {
+            const navLinks = document.querySelector('.nav-links');
+            navLinks.classList.toggle('active');
+        }
+
+        // Show login modal
+        function showLoginModal() {
+            document.getElementById('loginModal').style.display = 'block';
+        }
+
+        // Close login modal
+        function closeLoginModal() {
+            document.getElementById('loginModal').style.display = 'none';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('loginModal');
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        // Check if user is logged in and handle locked service access
+        function checkLoginStatus() {
+            // Dalam implementasi nyata, ini akan mengecek session/token dari server
+            // Untuk demo, kita bisa mensimulasikan dengan localStorage
+            const userToken = localStorage.getItem('userToken');
+            if (userToken) {
+                isLoggedIn = true;
+                unlockPendaftaranTanah();
+            }
+        }
+
+        // Unlock Pendaftaran Tanah service
+        function unlockPendaftaranTanah() {
+            const lockedCard = document.querySelector('.feature-card.locked');
+            if (lockedCard) {
+                lockedCard.classList.remove('locked');
+                lockedCard.onclick = null;
+                
+                // Convert div back to link
+                const newLink = document.createElement('a');
+                newLink.href = 'Pendaftaran Tanah.html';
+                newLink.className = 'feature-card';
+                newLink.innerHTML = `
+                    <span class="feature-icon">📋</span>
+                    <h3>Pendaftaran Tanah</h3>
+                    <p>Pendaftaran tanah untuk menjamin legalitas dan kepastian hukum kepemilikan.</p>
+                `;
+                
+                lockedCard.parentNode.replaceChild(newLink, lockedCard);
+            }
+        }
+
+        // Simulate login (untuk testing)
+        function simulateLogin() {
+            localStorage.setItem('userToken', 'dummy-token-123');
+            isLoggedIn = true;
+            unlockPendaftaranTanah();
+            closeLoginModal();
+        }
+
+        // Simulate logout (untuk testing)
+        function simulateLogout() {
+            localStorage.removeItem('userToken');
+            isLoggedIn = false;
+            location.reload(); // Reload to show locked state again
+        }
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                document.querySelector('.nav-links').classList.remove('active');
+            });
+        });
+
+        // Video error handling
+        const video = document.querySelector('.hero-video');
+        if (video) {
+            video.addEventListener('error', function() {
+                console.log('Video tidak dapat dimuat, menggunakan fallback background');
+                this.style.display = 'none';
+                document.querySelector('.hero').style.background = 'linear-gradient(135deg, #0F1B07 0%, #5C821A 50%, #0F1B07 100%)';
+            });
+        }
+
+        // Check login status on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            checkLoginStatus();
+        });
+
+        // Add keyboard support for modal
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeLoginModal();
+            }
+        });
+    </script>
+</body>
+</html>

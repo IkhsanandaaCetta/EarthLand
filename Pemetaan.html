@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EarthLand-Pemetaan</title>
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" 
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" 
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+    <!-- jQuery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <style>
+        :root {
+            --primary-dark: #0F1B07;
+            --primary-white: #ffffff;
+            --primary-green: #5C821A;
+            --primary-light: #C6D166;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--primary-white);
+            color: var(--primary-dark);
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary-green));
+            color: var(--primary-white);
+            padding: 15px 20px;
+            box-shadow: 0 2px 10px rgba(15, 27, 7, 0.3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 600;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .search-container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--primary-light);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-width: 280px;
+            flex-shrink: 0;
+        }
+
+        .search-title {
+            display: none;
+        }
+
+        .search-input {
+            padding: 6px 10px;
+            border: 1px solid var(--primary-light);
+            border-radius: 6px;
+            font-size: 13px;
+            transition: all 0.3s ease;
+            width: 150px;
+            color: var(--primary-dark);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary-green);
+            box-shadow: 0 0 10px rgba(92, 130, 26, 0.3);
+        }
+
+        .search-button {
+            background: linear-gradient(135deg, var(--primary-green), var(--primary-light));
+            color: var(--primary-white);
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .clear-button {
+            background: var(--primary-white);
+            color: var(--primary-green);
+            border: 1px solid var(--primary-green);
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .clear-button:hover {
+            background: var(--primary-green);
+            color: var(--primary-white);
+        }
+
+        .search-results {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            max-height: 200px;
+            overflow-y: auto;
+            margin-top: 5px;
+            background: var(--primary-white);
+            border: 1px solid var(--primary-light);
+            border-radius: 6px;
+            box-shadow: 0 4px 15px rgba(15, 27, 7, 0.2);
+            z-index: 1001;
+            display: none;
+        }
+
+        .search-result-item {
+            padding: 8px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-bottom: 5px;
+            background: rgba(198, 209, 102, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .search-result-item:hover {
+            background: var(--primary-light);
+            color: var(--primary-dark);
+        }
+
+        #legend {
+            background: var(--primary-white);
+            padding: 15px;
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            z-index: 1000;
+            border-radius: 10px;
+            border: 2px solid var(--primary-light);
+            box-shadow: 0 4px 15px rgba(15, 27, 7, 0.2);
+        }
+
+        .legend-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--primary-dark);
+        }
+
+        .leaflet-control-layers {
+            background: var(--primary-white);
+            border: 2px solid var(--primary-light);
+            border-radius: 8px;
+        }
+
+        .leaflet-control-layers-expanded {
+            padding: 10px;
+        }
+
+        .leaflet-popup-content-wrapper {
+            background: var(--primary-white);
+            border: 2px solid var(--primary-light);
+            border-radius: 8px;
+        }
+
+        .leaflet-popup-content table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        .leaflet-popup-content th {
+            background: var(--primary-green);
+            color: var(--primary-white);
+            padding: 6px;
+        }
+
+        .leaflet-popup-content td {
+            padding: 4px 6px;
+            border-bottom: 1px solid var(--primary-light);
+        }
+
+        #map {
+            width: 100%;
+            height: calc(100vh - 70px);
+            border-top: 3px solid var(--primary-green);
+        }
+
+        .loading {
+            display: none;
+            color: var(--primary-green);
+            font-style: italic;
+            font-size: 11px;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            margin-top: 5px;
+            background: var(--primary-white);
+            padding: 5px 8px;
+            border: 1px solid var(--primary-light);
+            border-radius: 4px;
+            z-index: 1001;
+        }
+
+        .header-search-wrapper {
+            position: relative;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🌍 Peta Bidang Tanah Desa Canden, Kecamatan Sambi</h1>
+        <div class="header-search-wrapper">
+            <div class="search-container">
+                <div class="search-title">🔍 Pencarian Bidang Tanah</div>
+                <input type="text" id="search-input" class="search-input" placeholder="Cari NIB, nama, alamat...">
+                <button onclick="searchLand()" class="search-button">Cari</button>
+                <button onclick="clearSearch()" class="clear-button">Reset</button>
+            </div>
+            <div class="loading" id="loading">Mencari data...</div>
+            <div id="search-results" class="search-results"></div>
+        </div>
+    </div>
+    
+    <div id="map"></div>
+    
+    <div id="legend">
+        <div class="legend-title">📊 Legenda</div>
+    </div>
+
+    <script>
+        var map = L.map('map').setView([-7.511387, 110.704000], 14);
+        var searchMarkers = [];
+        var currentPopup = null;
+
+        // WMS Layers
+        var wmsLayer1 = L.tileLayer.wms("http://localhost:8080/geoserver/wms", {
+            layers: "bidang_tanah",
+            format: "image/png",
+            transparent: true,
+            attribution: "&copy; EarthLand"
+        }).addTo(map);
+
+        var wmsLayer2 = L.tileLayer.wms("http://localhost:8080/geoserver/wms", {
+            layers: "jalan",
+            format: "image/png",
+            transparent: true,
+            attribution: "&copy; EarthLand"
+        }).addTo(map);
+
+        var wmsLayer3 = L.tileLayer.wms("http://localhost:8080/geoserver/wms", {
+            layers: "sungai",
+            format: "image/png",
+            transparent: true,
+            attribution: "&copy; EarthLand"
+        }).addTo(map);
+
+        var wmsLayer4 = L.tileLayer.wms("http://localhost:8080/geoserver/wms", {
+            layers: "admin_canden",
+            format: "image/png",
+            transparent: true,
+            attribution: "&copy; EarthLand"
+        }).addTo(map);
+
+        // Basemap
+        var osmDefault = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        var osmHOT = L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; OpenStreetMap contributors, Tiles style by Humanitarian OpenStreetMap Team'
+        });
+
+        // Legend for admin layer
+        var legendUrl = "http://localhost:8080/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&LAYER=bidang_tanah";
+        document.getElementById("legend").innerHTML = '<div class="legend-title">📊 Legenda</div><img src="' + legendUrl + '" alt="Legenda">';
+
+        // Basemap and overlay maps
+        var basemap = {
+            "🗺 OpenStreetMap": osmDefault,
+            "🚑 OpenStreetMap Humanitarian": osmHOT
+        };
+
+        var overlaymap = {
+            "🏘 Admin Canden": wmsLayer4,
+            "🏠 Bidang Tanah": wmsLayer1,
+            "🛣 Jalan": wmsLayer2,
+            "🌊 Sungai": wmsLayer3
+        };
+
+        L.control.layers(basemap, overlaymap).addTo(map);
+
+        // Search functionality
+        function searchLand() {
+            var searchTerm = document.getElementById('search-input').value.trim();
+            if (!searchTerm) {
+                alert('Masukkan kata kunci pencarian');
+                return;
+            }
+
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('search-results').innerHTML = '';
+
+            // Simulate search - replace with actual WFS query
+            setTimeout(function() {
+                document.getElementById('loading').style.display = 'none';
+                
+                // Mock search results
+                var mockResults = [
+                    {id: 1, nib: '4722577241061', owner: 'Gilang Setiawan', address: 'Jl. Perguruan No. 5 Desa Canden', lat: -7.511387, lng: 110.704000},
+                    {id: 2, nib: '4752585078650', owner: 'Hasan Hidayar', address: 'Jl. Perguruan II No. 11 Desa Canden', lat: -7.512000, lng: 110.705000},
+                    {id: 3, nib: '8161241822566', owner: 'Indah Kartika', address: 'Jl. Perguruan III No. 3 Desa Canden', lat: -7.510500, lng: 110.703500}
+                ];
+
+                var filteredResults = mockResults.filter(function(item) {
+                    return item.nib.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                           item.owner.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                           item.address.toLowerCase().includes(searchTerm.toLowerCase());
+                });
+
+                displaySearchResults(filteredResults);
+            }, 1000);
+        }
+
+        function displaySearchResults(results) {
+            var resultsDiv = document.getElementById('search-results');
+            
+            if (results.length === 0) {
+                resultsDiv.innerHTML = '<div style="color: #5C821A; font-style: italic; padding: 8px;">Tidak ada data yang ditemukan</div>';
+                resultsDiv.style.display = 'block';
+                return;
+            }
+
+            var html = '<div style="margin-bottom: 8px; font-weight: 600; color: #0F1B07; padding: 8px; border-bottom: 1px solid #C6D166;">Hasil Pencarian (' + results.length + ' data):</div>';
+            
+            results.forEach(function(item) {
+                html += '<div class="search-result-item" onclick="focusOnLocation(' + item.lat + ', ' + item.lng + ', \'' + item.nib + '\', \'' + item.owner + '\', \'' + item.address + '\')" style="padding: 8px; margin: 4px; cursor: pointer; border-radius: 4px; background: rgba(198, 209, 102, 0.1); font-size: 12px;">' +
+                       '<strong>NIB: ' + item.nib + '</strong><br>' +
+                       'Pemilik: ' + item.owner + '<br>' +
+                       'Alamat: ' + item.address +
+                       '</div>';
+            });
+            
+            resultsDiv.innerHTML = html;
+            resultsDiv.style.display = 'block';
+        }
+
+        function focusOnLocation(lat, lng, nib, owner, address) {
+            // Clear previous search markers
+            searchMarkers.forEach(function(marker) {
+                map.removeLayer(marker);
+            });
+            searchMarkers = [];
+
+            // Add marker and zoom to location
+            var marker = L.marker([lat, lng], {
+                icon: L.icon({
+                    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png',
+                    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+                    iconSize: [25, 41],
+                    iconAnchor: [12, 41],
+                    popupAnchor: [1, -34],
+                    shadowSize: [41, 41]
+                })
+            }).addTo(map);
+
+            searchMarkers.push(marker);
+
+            // Create popup content
+            var popupContent = '<div style="min-width: 200px;">' +
+                              '<h3 style="margin: 0 0 10px 0; color: #0F1B07;">📍 Detail Bidang Tanah</h3>' +
+                              '<table style="width: 100%; border-collapse: collapse;">' +
+                              '<tr><td style="font-weight: bold; padding: 4px; border-bottom: 1px solid #C6D166;">NIB:</td><td style="padding: 4px; border-bottom: 1px solid #C6D166;">' + nib + '</td></tr>' +
+                              '<tr><td style="font-weight: bold; padding: 4px; border-bottom: 1px solid #C6D166;">Pemilik:</td><td style="padding: 4px; border-bottom: 1px solid #C6D166;">' + owner + '</td></tr>' +
+                              '<tr><td style="font-weight: bold; padding: 4px;">Alamat:</td><td style="padding: 4px;">' + address + '</td></tr>' +
+                              '</table>' +
+                              '</div>';
+
+            marker.bindPopup(popupContent).openPopup();
+            map.setView([lat, lng], 16);
+        }
+
+        function clearSearch() {
+            document.getElementById('search-input').value = '';
+            document.getElementById('search-results').innerHTML = '';
+            document.getElementById('search-results').style.display = 'none';
+            document.getElementById('loading').style.display = 'none';
+            
+            // Clear search markers
+            searchMarkers.forEach(function(marker) {
+                map.removeLayer(marker);
+            });
+            searchMarkers = [];
+            
+            // Reset map view
+            map.setView([-7.511387, 110.704000], 15);
+        }
+
+        // Enable search on Enter key
+        document.getElementById('search-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchLand();
+            }
+        });
+
+        // Click info - Only show center popup
+        map.on('click', function(e) {
+            var pos = e.latlng;
+            var pt = map.latLngToContainerPoint(pos);
+            var w = map.getSize().x;
+            var h = map.getSize().y;
+            var bnd = map.getBounds();
+            var west = bnd.getWest();
+            var east = bnd.getEast();
+            var north = bnd.getNorth();
+            var south = bnd.getSouth();
+
+            $.ajax({
+                url: "/geoserver/wms",
+                data: {
+                    service: "WMS",
+                    version: "1.1.1",
+                    request: "GetFeatureInfo",
+                    info_format: "application/json",
+                    layers: "bidang_tanah",
+                    query_layers: "bidang_tanah",
+                    width: w,
+                    height: h,
+                    x: parseInt(pt.x),
+                    y: parseInt(pt.y),
+                    bbox: west + "," + south + "," + east + "," + north
+                },
+                success: function(ajaxresult) {
+                    console.log(ajaxresult);
+                    
+                    if (ajaxresult.features && ajaxresult.features.length > 0) {
+                        var pro = ajaxresult.features[0].properties;
+                        var content = '<div style="min-width: 250px;"><h3 style="margin: 0 0 10px 0; color: #0F1B07;">📋 Informasi Bidang Tanah</h3><table border="1" style="border-collapse: collapse; width: 100%;"><tr style="background: #5C821A; color: white;"><th style="padding: 6px;">Atribut</th><th style="padding: 6px;">Keterangan</th></tr>';
+                        $.each(pro, function(index, value) {
+                            content += "<tr><td style='padding: 4px 6px; border-bottom: 1px solid #C6D166;'>" + index + "</td><td style='padding: 4px 6px; border-bottom: 1px solid #C6D166;'>" + value + "</td></tr>";
+                        });
+                        content += "</table></div>";
+
+                        L.popup().setLatLng(pos).setContent(content).openOn(map);
+                    }
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    alert("Error: Tidak dapat mengambil informasi dari server");
+                }
+            });
+        });
+    </script>
+</body>
+</html>

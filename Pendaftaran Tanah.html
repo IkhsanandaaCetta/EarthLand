@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Pendaftaran Tanah</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0F1B07 0%, #5C821A 50%, #0F1B07 100%);
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Animated background elements */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(198, 209, 102, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(92, 130, 26, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 60% 40%, rgba(15, 27, 7, 0.2) 0%, transparent 50%);
+            z-index: -2;
+            animation: backgroundFloat 20s ease-in-out infinite;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(45deg, rgba(198, 209, 102, 0.03) 25%, transparent 25%),
+                linear-gradient(-45deg, rgba(198, 209, 102, 0.03) 25%, transparent 25%),
+                linear-gradient(45deg, transparent 75%, rgba(92, 130, 26, 0.02) 75%),
+                linear-gradient(-45deg, transparent 75%, rgba(92, 130, 26, 0.02) 75%);
+            background-size: 60px 60px;
+            background-position: 0 0, 0 30px, 30px -30px, -30px 0px;
+            z-index: -1;
+            opacity: 0.7;
+            animation: patternShift 15s linear infinite;
+        }
+
+        @keyframes backgroundFloat {
+            0%, 100% {
+                transform: translateY(0px) scale(1);
+            }
+            25% {
+                transform: translateY(-10px) scale(1.02);
+            }
+            50% {
+                transform: translateY(5px) scale(0.98);
+            }
+            75% {
+                transform: translateY(-5px) scale(1.01);
+            }
+        }
+
+        @keyframes patternShift {
+            0% {
+                background-position: 0 0, 0 30px, 30px -30px, -30px 0px;
+            }
+            100% {
+                background-position: 60px 60px, 60px 90px, 90px 30px, 30px 60px;
+            }
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 
+                0 25px 50px rgba(15, 27, 7, 0.4),
+                0 0 0 1px rgba(198, 209, 102, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            overflow: hidden;
+            position: relative;
+            animation: containerFloat 6s ease-in-out infinite;
+        }
+
+        @keyframes containerFloat {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-5px);
+            }
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #C6D166, #5C821A, #0F1B07, #5C821A, #C6D166);
+            background-size: 200% 100%;
+            animation: shimmer 3s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0%, 100% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+        }
+
+        .header {
+            background: linear-gradient(135deg, #0F1B07 0%, #5C821A 50%, #0F1B07 100%);
+            color: #ffffff;
+            padding: 40px 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(198, 209, 102, 0.1) 0%, transparent 70%);
+            animation: headerGlow 8s ease-in-out infinite;
+        }
+
+        @keyframes headerGlow {
+            0%, 100% {
+                transform: rotate(0deg) scale(1);
+                opacity: 0.3;
+            }
+            50% {
+                transform: rotate(180deg) scale(1.1);
+                opacity: 0.6;
+            }
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header p {
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+            font-size: 1.1rem;
+        }
+
+        .form-container {
+            padding: 40px;
+            position: relative;
+        }
+
+        .form-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 10% 10%, rgba(198, 209, 102, 0.02) 0%, transparent 30%),
+                radial-gradient(circle at 90% 90%, rgba(92, 130, 26, 0.03) 0%, transparent 30%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .form-section {
+            margin-bottom: 30px;
+            border-bottom: 2px solid rgba(241, 241, 241, 0.8);
+            padding-bottom: 20px;
+            position: relative;
+            z-index: 1;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 8px 16px rgba(15, 27, 7, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .form-section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(15, 27, 7, 0.15);
+        }
+
+        .form-section:last-child {
+            border-bottom: none;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            color: #0F1B07;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #5C821A;
+            display: inline-block;
+            position: relative;
+            background: linear-gradient(45deg, #0F1B07, #5C821A);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: #C6D166;
+            transition: width 0.3s ease;
+        }
+
+        .form-section:hover .section-title::after {
+            width: 100%;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .form-col {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #0F1B07;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="number"],
+        input[type="date"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid rgba(225, 225, 225, 0.8);
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.4s ease;
+            background: rgba(249, 249, 249, 0.8);
+            backdrop-filter: blur(5px);
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            border-color: #5C821A;
+            background: rgba(255, 255, 255, 0.95);
+            outline: none;
+            box-shadow: 
+                0 0 20px rgba(92, 130, 26, 0.3),
+                0 0 0 3px rgba(198, 209, 102, 0.2);
+            transform: translateY(-2px);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .required {
+            color: #e74c3c;
+        }
+
+        .btn-container {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn {
+            padding: 15px 35px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            text-transform: uppercase;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #5C821A 0%, #0F1B07 100%);
+            color: #ffffff;
+            box-shadow: 0 8px 15px rgba(92, 130, 26, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(92, 130, 26, 0.4);
+            background: linear-gradient(135deg, #6a9620 0%, #1a2f0a 100%);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #C6D166 0%, #a8b84d 100%);
+            color: #0F1B07;
+            box-shadow: 0 8px 15px rgba(198, 209, 102, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background: linear-gradient(135deg, #d4dc7a 0%, #b8c451 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(198, 209, 102, 0.4);
+        }
+
+        .alert {
+            padding: 18px;
+            margin: 20px 0;
+            border-radius: 12px;
+            display: none;
+            backdrop-filter: blur(10px);
+            border: 1px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .alert::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            animation: alertShine 2s ease-in-out infinite;
+        }
+
+        @keyframes alertShine {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .alert-success {
+            background: rgba(198, 209, 102, 0.2);
+            color: #0F1B07;
+            border-color: #C6D166;
+            box-shadow: 0 8px 16px rgba(198, 209, 102, 0.2);
+        }
+
+        .alert-error {
+            background: rgba(248, 215, 218, 0.8);
+            color: #721c24;
+            border-color: #f5c6cb;
+            box-shadow: 0 8px 16px rgba(248, 215, 218, 0.3);
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            margin: 10% auto;
+            padding: 0;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 
+                0 30px 60px rgba(0, 0, 0, 0.3),
+                0 0 0 1px rgba(198, 209, 102, 0.3);
+            position: relative;
+            overflow: hidden;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #5C821A 0%, #0F1B07 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .modal-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(198, 209, 102, 0.2) 0%, transparent 70%);
+            animation: modalGlow 4s ease-in-out infinite;
+        }
+
+        @keyframes modalGlow {
+            0%, 100% {
+                transform: rotate(0deg);
+                opacity: 0.3;
+            }
+            50% {
+                transform: rotate(180deg);
+                opacity: 0.6;
+            }
+        }
+
+        .modal-icon {
+            font-size: 4rem;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-subtitle {
+            font-size: 1rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        .modal-body {
+            padding: 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .modal-body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(198, 209, 102, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(92, 130, 26, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .modal-message {
+            font-size: 1.1rem;
+            color: #333;
+            margin-bottom: 25px;
+            line-height: 1.6;
+            position: relative;
+            z-index: 1;
+        }
+
+        .modal-info {
+            background: rgba(198, 209, 102, 0.1);
+            border: 2px solid rgba(198, 209, 102, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .modal-info h4 {
+            color: #0F1B07;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .modal-info p {
+            color: #333;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .modal-btn {
+            background: linear-gradient(135deg, #5C821A 0%, #0F1B07 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .modal-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .modal-btn:hover::before {
+            left: 100%;
+        }
+
+        .modal-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(92, 130, 26, 0.4);
+            background: linear-gradient(135deg, #6a9620 0%, #1a2f0a 100%);
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                border-radius: 15px;
+            }
+            
+            .form-container {
+                padding: 20px;
+            }
+            
+            .form-section {
+                padding: 20px;
+            }
+            
+            .form-row {
+                flex-direction: column;
+            }
+            
+            .form-col {
+                min-width: 100%;
+            }
+            
+            .btn-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 300px;
+            }
+            
+            .header h1 {
+                font-size: 1.5rem;
+            }
+
+            .modal-content {
+                margin: 20% auto;
+                width: 95%;
+            }
+
+            .modal-header {
+                padding: 25px 20px;
+            }
+
+            .modal-body {
+                padding: 25px 20px;
+            }
+
+            .modal-icon {
+                font-size: 3rem;
+            }
+
+            .modal-title {
+                font-size: 1.3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📋 Form Pendaftaran Tanah</h1>
+            <p>Silakan lengkapi data-data berikut dengan benar</p>
+        </div>
+
+        <div class="form-container">
+            <div class="alert alert-error" id="errorAlert">
+                Mohon lengkapi semua field yang wajib diisi.
+            </div>
+
+            <form id="landRegistrationForm">
+                <!-- Data Pemohon -->
+                <div class="form-section">
+                    <h2 class="section-title">👤 Data Pemohon</h2>
+                    <div class="form-row">
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="nama">Nama Lengkap <span class="required">*</span></label>
+                                <input type="text" id="nama" name="nama" required>
+                            </div>
+                        </div>
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="nik">NIK <span class="required">*</span></label>
+                                <input type="text" id="nik" name="nik" maxlength="16" required>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" id="email" name="email">
+                            </div>
+                        </div>
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="telepon">Nomor Telepon <span class="required">*</span></label>
+                                <input type="tel" id="telepon" name="telepon" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="alamat">Alamat Lengkap <span class="required">*</span></label>
+                        <textarea id="alamat" name="alamat" placeholder="Masukkan alamat lengkap..." required></textarea>
+                    </div>
+                </div>
+
+                <!-- Data Tanah -->
+                <div class="form-section">
+                    <h2 class="section-title">🏞 Data Tanah</h2>
+                    <div class="form-row">
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="jenisHak">Jenis Hak Tanah <span class="required">*</span></label>
+                                <select id="jenisHak" name="jenisHak" required>
+                                    <option value="">Pilih Jenis Hak</option>
+                                    <option value="Hak Milik">Hak Milik</option>
+                                    <option value="Hak Guna Usaha">Hak Guna Usaha</option>
+                                    <option value="Hak Guna Bangunan">Hak Guna Bangunan</option>
+                                    <option value="Hak Pakai">Hak Pakai</option>
+                                    <option value="Hak Pengelolaan">Hak Pengelolaan</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="luasTanah">Luas Tanah (m²) <span class="required">*</span></label>
+                                <input type="number" id="luasTanah" name="luasTanah" min="1" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="alamatTanah">Alamat/Lokasi Tanah <span class="required">*</span></label>
+                        <textarea id="alamatTanah" name="alamatTanah" placeholder="Masukkan alamat atau lokasi tanah..." required></textarea>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="kecamatan">Kecamatan <span class="required">*</span></label>
+                                <input type="text" id="kecamatan" name="kecamatan" required>
+                            </div>
+                        </div>
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="kelurahan">Kelurahan/Desa <span class="required">*</span></label>
+                                <input type="text" id="kelurahan" name="kelurahan" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Data Pendukung -->
+                <div class="form-section">
+                    <h2 class="section-title">📄 Data Pendukung</h2>
+                    <div class="form-row">
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="nomorSertifikat">Nomor Sertifikat (jika ada)</label>
+                                <input type="text" id="nomorSertifikat" name="nomorSertifikat">
+                            </div>
+                        </div>
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="tanggalSertifikat">Tanggal Sertifikat</label>
+                                <input type="date" id="tanggalSertifikat" name="tanggalSertifikat">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="keterangan">Keterangan Tambahan</label>
+                        <textarea id="keterangan" name="keterangan" placeholder="Masukkan keterangan tambahan jika ada..."></textarea>
+                    </div>
+                </div>
+
+                <div class="btn-container">
+                    <button type="submit" class="btn btn-primary">💾 Simpan Data</button>
+                    <button type="reset" class="btn btn-secondary">🔄 Reset Form</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-icon">✅</div>
+                <div class="modal-title">Data Berhasil Disimpan!</div>
+                <div class="modal-subtitle">Pendaftaran Tanah Anda Telah Tercatat</div>
+            </div>
+            <div class="modal-body">
+                <div class="modal-message">
+                    Terima kasih! Data pendaftaran tanah Anda telah berhasil disimpan dalam sistem kami.
+                </div>
+                <div class="modal-info">
+                    <h4>📍 Langkah Selanjutnya:</h4>
+                    <p>Silakan datang ke <strong>Kantor Pertanahan terdekat</strong> untuk konfirmasi lebih lanjut dan melengkapi dokumen pendukung yang diperlukan.</p>
+                </div>
+                <button id="modalOkBtn" class="modal-btn">
+                    🏠 OK, Kembali ke Home
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('landRegistrationForm');
+        const errorAlert = document.getElementById('errorAlert');
+        const successModal = document.getElementById('successModal');
+        const modalOkBtn = document.getElementById('modalOkBtn');
+
+        // Data storage
+        let registrationData = [];
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Hide alerts
+            errorAlert.style.display = 'none';
+
+            // Get form data
+            const formData = new FormData(form);
+            const data = {};
+            
+            // Convert FormData to object
+            for (let [key, value] of formData.entries()) {
+                data[key] = value;
+            }
+
+            // Validate required fields
+            const requiredFields = ['nama', 'nik', 'telepon', 'alamat', 'jenisHak', 'luasTanah', 'alamatTanah', 'kecamatan', 'kelurahan'];
+            let isValid = true;
+
+            for (let field of requiredFields) {
+                if (!data[field] || data[field].trim() === '') {
+                    isValid = false;
+                    break;
+                }
+            }
+
+            if (!isValid) {
+                errorAlert.style.display = 'block';
+                errorAlert.scrollIntoView({ behavior: 'smooth' });
+                return;
+            }
+
+            // Validate NIK (should be 16 digits)
+            if (data.nik.length !== 16 || !/^\d+$/.test(data.nik)) {
+                errorAlert.textContent = 'NIK harus terdiri dari 16 digit angka.';
+                errorAlert.style.display = 'block';
+                errorAlert.scrollIntoView({ behavior: 'smooth' });
+                return;
+            }
+
+            // Add timestamp and ID
+            data.id = Date.now();
+            data.tanggalDaftar = new Date().toLocaleDateString('id-ID');
+            
+            // Store data
+            registrationData.push(data);
+            
+            // Show success modal
+            successModal.style.display = 'block';
+            document.body.style.overflow = 'hidden'; // Prevent scrolling
+
+            // Log data (for demonstration)
+            console.log('Data Pendaftaran Tanah:', data);
+            console.log('Semua Data:', registrationData);
+        });
+
+        // Modal OK button event
+        modalOkBtn.addEventListener('click', function() {
+            // Hide modal
+            successModal.style.display = 'none';
+            document.body.style.overflow = 'auto'; // Restore scrolling
+            
+            // Reset form
+            form.reset();
+            
+            // Scroll to top smoothly
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Close modal when clicking outside
+        window.addEventListener('click', function(event) {
+            if (event.target === successModal) {
+                successModal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+                form.reset();
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            }
+        });
+
+        // Reset form event
+        form.addEventListener('reset', function() {
+            errorAlert.style.display = 'none';
+        });
+
+        // Auto-format NIK input
+        document.getElementById('nik').addEventListener('input', function(e) {
+            this.value = this.value.replace(/\D/g, '').substring(0, 16);
+        });
+
+        // Auto-format phone number
+        document.getElementById('telepon').addEventListener('input', function(e) {
+            let value = this.value.replace(/\D/g, '');
+            if (value.startsWith('0')) {
+                value = '+62' + value.substring(1);
+            } else if (!value.startsWith('+62')) {
+                value = '+62' + value;
+            }
+            this.value = value;
+        });
+
+        // Auto-format luas tanah
+        document.getElementById('luasTanah').addEventListener('input', function(e) {
+            if (this.value < 0) {
+                this.value = 0;
+            }
+        });
+
+        // Escape key to close modal
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape' && successModal.style.display === 'block') {
+                successModal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+                form.reset();
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            }
+        });
+    </script>
+</body>
+</html>
